@@ -2,12 +2,22 @@ import json, os, datetime, calendar, email.utils
 import requests, feedparser
 from concurrent.futures import ThreadPoolExecutor
 
+
 SITES = {
- 'LaLiiga':'https://www.laliiga.com', 'Valioliiga':'https://www.valioliiga.com',
- 'SuomiFutis':'https://www.suomifutis.com', 'SuomiKiekko':'https://www.suomikiekko.com',
- 'Leijonat':'https://www.leijonat.com', 'NHLSuomi':'https://www.nhlsuomi.com',
- 'SuomiKoris':'https://www.suomikoris.com', 'SuomiUrheilu':'https://www.suomiurheilu.com'
+ 'LaLiiga':'https://www.laliiga.com',
+ 'Valioliiga':'https://www.valioliiga.com',
+ 'SuomiFutis':'https://www.suomifutis.com',
+ 'SuomiKiekko':'https://www.suomikiekko.com',
+ 'Leijonat':'https://www.leijonat.com',
+ 'NHLSuomi':'https://www.nhlsuomi.com',
+ 'SuomiKoris':'https://www.suomikoris.com',
+ 'SuomiUrheilu':'https://www.suomiurheilu.com',
+ 'Bundesliiga':'https://www.bundesliiga.com',
+ 'SuomiTennis':'https://www.suomitennis.com',
+ 'Huuhkajat':'https://www.huuhkajat.com',
+ 'Susijengi':'https://www.susijengi.com'
 }
+
 HEADERS={'User-Agent':'Uutisvahti/1.0 (personal RSS reader)'}
 
 def fetch(item):
@@ -34,7 +44,7 @@ if os.path.exists('news.json'):
  except Exception: pass
 by_url={x['url']:x for x in old if x.get('url')}
 statuses={}
-with ThreadPoolExecutor(max_workers=8) as pool:
+with ThreadPoolExecutor(max_workers=12) as pool:
  for name,stories,error in pool.map(fetch,SITES.items()):
   statuses[name]={'ok':error is None,'fetched':len(stories),'error':error}
   for story in stories: by_url[story['url']]=story
